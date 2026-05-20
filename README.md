@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://npmjs.org/package/opay-waas-node"><img src="https://img.shields.io/npm/v/opay-waas-node.svg" alt="NPM Version"></a>
+  <a href="https://www.npmjs.com/package/opay-waas-node"><img src="https://img.shields.io/npm/v/opay-waas-node.svg" alt="NPM Version"></a>
   <a href="https://github.com/yourusername/opay-waas-node/blob/main/LICENSE"><img src="https://img.shields.io/github/license/yourusername/opay-waas-node.svg" alt="License"></a>
 </p>
 
