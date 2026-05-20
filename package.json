@@ -1,0 +1,37 @@
+{
+  "name": "opay-waas-node",
+  "version": "1.0.0",
+  "description": "A developer-first, type-safe TypeScript/JavaScript SDK for OPay Wallet-as-a-Service (WaaS) and Merchant Services",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "opay",
+    "waas",
+    "wallet",
+    "fintech",
+    "nigeria",
+    "sdk",
+    "typescript",
+    "paystack",
+    "flutterwave"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "jsrsasign": "^11.1.0",
+    "node-rsa": "^1.1.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/jsrsasign": "^10.5.12",
+    "@types/node": "^20.11.0",
+    "@types/node-rsa": "^1.1.4",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3"
+  }
+}
