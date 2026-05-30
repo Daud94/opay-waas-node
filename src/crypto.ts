@@ -179,4 +179,45 @@ export class OPayCrypto {
     signatureVf.updateString(mapSplicing);
     return signatureVf.verify(b64tohex(sign));
   }
+
+  /**
+   * Verifies the OPay signature for secure/encrypted incoming webhooks.
+   * Webhook signatures are signed over: paramContent + timestamp
+   */
+  static verifyWebhookSignature(
+    paramContent: string,
+    timestamp: string,
+    sign: string,
+    publicKey: string,
+  ): boolean {
+    try {
+      const formattedPublicKey = OPayCrypto.formatPublicKey(publicKey);
+      const inputString = paramContent + timestamp;
+      const signatureVf = new KJUR.crypto.Signature({ alg: 'SHA256withRSA' });
+      signatureVf.init(formattedPublicKey);
+      signatureVf.updateString(inputString);
+      return signatureVf.verify(b64tohex(sign));
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Decrypts the RSA-encrypted paramContent webhook payload using the private key.
+   */
+  static decryptParamContent(paramContent: string, privateKey: string): any {
+    try {
+      const formattedPrivateKey = OPayCrypto.formatPrivateKey(privateKey);
+      const rsa = new NodeRSA(formattedPrivateKey);
+      rsa.setOptions({
+        encryptionScheme: { scheme: 'pkcs1' } as any,
+        environment: 'browser',
+      });
+
+      const decrypted = rsa.decrypt(paramContent, 'utf8');
+      return JSON.parse(decrypted);
+    } catch (error) {
+      throw new Error(`Failed to decrypt OPay paramContent: ${(error as any).message}`);
+    }
+  }
 }

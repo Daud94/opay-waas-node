@@ -14,6 +14,35 @@ export class OPayWebhooks {
   }
 
   /**
+   * Verifies the signature of a secure/encrypted OPay webhook payload.
+   *
+   * @param paramContent The base64 encrypted paramContent string.
+   * @param timestamp The timestamp of the webhook event.
+   * @param signature The signature string.
+   * @param opayPublicKey OPay's Public RSA Key.
+   */
+  static verifySecure(
+    paramContent: string,
+    timestamp: string,
+    signature: string,
+    opayPublicKey: string,
+  ): boolean {
+    if (!paramContent || !timestamp || !signature) return false;
+    return OPayCrypto.verifyWebhookSignature(paramContent, timestamp, signature, opayPublicKey);
+  }
+
+  /**
+   * Decrypts a secure/encrypted OPay webhook payload.
+   *
+   * @param paramContent The base64 encrypted paramContent string.
+   * @param privateKey The Merchant's Private RSA Key.
+   */
+  static decryptSecure(paramContent: string, privateKey: string): any {
+    if (!paramContent) throw new Error('paramContent is required for decryption.');
+    return OPayCrypto.decryptParamContent(paramContent, privateKey);
+  }
+
+  /**
    * Helper utility to normalize and parse transaction webhook events.
    * Handles flat format or nested OPay webhook payload structures.
    */
@@ -48,7 +77,7 @@ export class OPayWebhooks {
         amount: body.depositAmount || body.amount,
         transactionId: body.orderNo || body.payNo || body.transactionId,
         currency: body.currency || 'NGN',
-        reference: body.outOrderNo || body.reference,
+        reference: body.outOrderNo || body.reference || body.refId,
         rawPayload: body,
       };
     }
